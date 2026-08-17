@@ -1,0 +1,222 @@
+.page {
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--space-2xl);
+  align-items: start;
+}
+
+/* ── Primary column ── */
+.primary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  min-width: 0;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-xs) 0;
+  font-size: 0.65rem;
+  font-weight: var(--font-weight-semibold);
+  color: #8b6914;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+[data-color-scheme="dark"] .eyebrow {
+  color: #c9a84c;
+}
+
+.heroTitle {
+  margin: 0 0 var(--space-sm) 0;
+  font-size: clamp(1.4rem, 3vw, 1.875rem);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: #2c2416;
+}
+
+[data-color-scheme="dark"] .heroTitle {
+  color: #d4c9b8;
+}
+
+.heroSubtitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: #7a6b52;
+  line-height: var(--line-height-relaxed);
+}
+
+.heroImage {
+  width: 100%;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: #e8e0d0;
+}
+
+[data-color-scheme="dark"] .heroImage {
+  background: #2a2318;
+}
+
+.heroImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.tag {
+  font-size: 0.6rem;
+  font-weight: var(--font-weight-semibold);
+  color: #8b6914;
+  background: rgba(139, 105, 20, 0.08);
+  padding: 2px 6px;
+  border-radius: var(--border-radius-sm);
+}
+
+[data-color-scheme="dark"] .tag {
+  color: #c9a84c;
+  background: rgba(201, 168, 76, 0.12);
+}
+
+.readMore {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: #8b6914;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: opacity var(--duration-200) var(--ease-out);
+  align-self: flex-start;
+}
+
+[data-color-scheme="dark"] .readMore {
+  color: #c9a84c;
+}
+
+.readMore:hover {
+  opacity: 0.7;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  position: sticky;
+  top: calc(var(--space-2xl) + var(--space-lg));
+}
+
+.sidebarSection {
+  border: 1px solid #c4b8a0;
+  border-radius: var(--border-radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+[data-color-scheme="dark"] .sidebarSection {
+  border-color: #3d3428;
+}
+
+.sidebarHeading {
+  margin: 0;
+  font-size: 0.6rem;
+  font-weight: var(--font-weight-semibold);
+  color: #8b6914;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+[data-color-scheme="dark"] .sidebarHeading {
+  color: #c9a84c;
+}
+
+.recentList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.recentLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-xs) 0;
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--duration-200) var(--ease-out);
+}
+
+.recentLink:hover {
+  color: #8b6914;
+}
+
+.recentTitle {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recentDate {
+  font-size: 0.6rem;
+  color: #9a8d7a;
+  flex-shrink: 0;
+  margin-left: var(--space-sm);
+}
+
+.emptyMsg {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: #9a8d7a;
+}
+
+.viewAll {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: #8b6914;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: opacity var(--duration-200) var(--ease-out);
+}
+
+[data-color-scheme="dark"] .viewAll {
+  color: #c9a84c;
+}
+
+.viewAll:hover {
+  opacity: 0.7;
+}
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+}

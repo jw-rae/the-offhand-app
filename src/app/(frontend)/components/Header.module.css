@@ -1,0 +1,133 @@
+.header {
+  position: sticky;
+  top: 0;
+  flex-shrink: 0;
+  height: var(--space-2xl);
+  background: #f5f0e8;
+  border-bottom: 1px solid #c4b8a0;
+  z-index: var(--z-index-50);
+}
+
+[data-color-scheme="dark"] .header {
+  background: #1a1610;
+  border-bottom-color: #3d3428;
+}
+
+.container {
+  height: 100%;
+  padding: 0 var(--space-2xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.brand {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #5c4a1e;
+  text-decoration: none;
+  transition: color var(--duration-200) var(--ease-out);
+}
+
+[data-color-scheme="dark"] .brand {
+  color: #c9a84c;
+}
+
+.brand:hover {
+  color: #8b6914;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.navLink {
+  position: relative;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: #7a6b52;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: color var(--duration-200) var(--ease-out);
+  padding-bottom: 3px;
+}
+
+[data-color-scheme="dark"] .navLink {
+  color: #a09480;
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #8b6914;
+  transition: width 0.28s var(--ease-out);
+}
+
+.navLink:hover {
+  color: #3d2e14;
+}
+
+[data-color-scheme="dark"] .navLink:hover {
+  color: #d4c9b8;
+}
+
+.navLink:hover::after,
+.navLink.active::after {
+  width: 100%;
+}
+
+.navLink.active {
+  color: #5c4a1e;
+}
+
+[data-color-scheme="dark"] .navLink.active {
+  color: #c9a84c;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.themeToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: #7a6b52;
+  border-radius: var(--border-radius-md);
+  transition: color var(--duration-200) var(--ease-out), background var(--duration-200) var(--ease-out);
+}
+
+.themeToggle:hover {
+  color: #3d2e14;
+  background: rgba(139, 105, 20, 0.08);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0 var(--space-lg);
+  }
+
+  .nav {
+    gap: var(--space-md);
+  }
+}
