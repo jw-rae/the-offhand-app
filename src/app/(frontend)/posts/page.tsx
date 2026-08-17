@@ -16,12 +16,25 @@ type PostDoc = {
   publishedAt?: string
 }
 
-export default async function PostsPage() {
+const VARIANTS = ['short', 'medium', 'tall', 'wide', 'text-only'] as const
+
+interface PostsPageProps {
+  searchParams: Promise<{ tag?: string }>
+}
+
+export default async function PostsPage({ searchParams }: PostsPageProps) {
+  const params = await searchParams
   const payload = await getPayload({ config })
+
+  const where: any = { _status: { equals: 'published' } }
+
+  if (params.tag) {
+    where['tags.tag'] = { equals: params.tag }
+  }
 
   const { docs } = await payload.find({
     collection: 'posts',
-    where: { _status: { equals: 'published' } },
+    where,
     limit: 50,
     sort: '-publishedAt',
     depth: 1,
@@ -32,30 +45,48 @@ export default async function PostsPage() {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <p className={styles.eyebrow}>Work</p>
-        <h1 className={styles.title}>All Posts</h1>
+        <div className={styles.headerLeft}>
+          <p className={styles.eyebrow}>Work</p>
+          <h1 className={styles.title}>
+            {params.tag ? params.tag : 'All Posts'}
+          </h1>
+        </div>
+        <a href="/search" className={styles.searchLink}>
+          Advanced search &rarr;
+        </a>
       </div>
 
+      {params.tag && (
+        <div>
+          <a href="/posts" className={styles.activeFilter}>
+            {params.tag}
+            <span className={styles.activeFilterX}>&times;</span>
+          </a>
+        </div>
+      )}
+
       {posts.length > 0 ? (
-        <div className={styles.grid}>
-          {posts.map((post) => (
-            <PostCard
-              key={post.id}
-              title={post.title}
-              slug={post.slug}
-              description={post.description}
-              publishedAt={post.publishedAt}
-              tags={post.tags}
-              featuredImageUrl={
-                post.featuredImage && typeof post.featuredImage === 'object' && 'url' in post.featuredImage
-                  ? post.featuredImage.url
-                  : undefined
-              }
-            />
-          ))}
+        <div className={styles.masonry}>
+          {posts.map((post, i) => {
+            const hasImage = post.featuredImage && typeof post.featuredImage === 'object' && 'url' in post.featuredImage && post.featuredImage.url
+            const variant = hasImage ? VARIANTS[i % VARIANTS.length] : 'text-only'
+
+            return (
+              <PostCard
+                key={post.id}
+                title={post.title}
+                slug={post.slug}
+                description={post.description}
+                publishedAt={post.publishedAt}
+                tags={post.tags}
+                featuredImageUrl={hasImage ? post.featuredImage.url : undefined}
+                variant={variant}
+              />
+            )
+          })}
         </div>
       ) : (
-        <p className={styles.empty}>No posts yet. Check back soon.</p>
+        <p className={styles.empty}>No posts found. Check back soon.</p>
       )}
     </div>
   )

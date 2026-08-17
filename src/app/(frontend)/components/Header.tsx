@@ -2,18 +2,37 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import styles from './Header.module.css'
 
-export function Header() {
+type HeaderProps = {
+  title?: string
+  logo?: { id: number; url?: string | null; alt?: string } | null
+}
+
+export function Header({ title = 'THE OFFHAND', logo }: HeaderProps) {
   const pathname = usePathname()
+  const logoUrl = typeof logo === 'object' ? logo?.url : null
+  const logoAlt = typeof logo === 'object' ? logo?.alt : title
 
   return (
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.left}>
           <Link href="/" className={styles.brand}>
-            THE OFFHAND
+            {logoUrl ? (
+              <span className={styles.logo}>
+                <Image
+                  src={logoUrl}
+                  alt={logoAlt || title}
+                  width={28}
+                  height={28}
+                  style={{ objectFit: 'contain' }}
+                />
+              </span>
+            ) : null}
+            <span>{title.toUpperCase()}</span>
           </Link>
         </div>
         <nav className={styles.nav}>
@@ -22,6 +41,12 @@ export function Header() {
             className={`${styles.navLink} ${pathname === '/posts' ? styles.active : ''}`}
           >
             Work
+          </Link>
+          <Link
+            href="/search"
+            className={`${styles.navLink} ${pathname === '/search' ? styles.active : ''}`}
+          >
+            Search
           </Link>
           <div className={styles.controls}>
             <button

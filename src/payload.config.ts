@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 import { Users } from './collections/Users'
 import { Posts } from './collections/Posts'
 import { Media } from './collections/Media'
+import { SiteSettings } from './globals/SiteSettings'
 import { YouTubeEmbed } from './blocks/YouTubeEmbed'
 
 const filename = fileURLToPath(import.meta.url)
@@ -20,6 +21,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Posts, Media],
+  globals: [SiteSettings],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

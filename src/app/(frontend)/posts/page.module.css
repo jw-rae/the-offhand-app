@@ -1,5 +1,5 @@
 .page {
-  max-width: 960px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: var(--space-lg) var(--space-lg) var(--space-2xl);
   display: flex;
@@ -8,8 +8,14 @@
 }
 
 .header {
-  text-align: center;
-  padding-top: var(--space-sm);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.headerLeft {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -17,41 +23,78 @@
 
 .eyebrow {
   margin: 0;
-  font-size: 0.6rem;
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: #9a8d7a;
+  color: var(--color-text-tertiary);
   text-transform: uppercase;
   letter-spacing: 0.15em;
 }
 
 .title {
   margin: 0;
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
   font-weight: var(--font-weight-black, 900);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  color: #2c2416;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--color-text-primary);
 }
 
-[data-color-scheme="dark"] .title {
-  color: #d4c9b8;
+.searchLink {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--accent);
+  text-decoration: none;
+  transition: opacity var(--duration-200) var(--ease-out);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--space-lg);
+.searchLink:hover {
+  opacity: 0.75;
+}
+
+.activeFilter {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--accent);
+  background: var(--accent-muted);
+  border-radius: var(--border-radius-full, 999px);
+  text-decoration: none;
+  transition: opacity var(--duration-200) var(--ease-out);
+}
+
+.activeFilter:hover {
+  opacity: 0.75;
+}
+
+.activeFilterX {
+  font-size: var(--font-size-sm);
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.masonry {
+  columns: 3;
+  column-gap: var(--space-lg);
 }
 
 .empty {
   text-align: center;
-  color: #9a8d7a;
+  color: var(--color-text-tertiary);
   padding: var(--space-3xl) 0;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
+}
+
+@media (max-width: 900px) {
+  .masonry {
+    columns: 2;
+  }
 }
 
 @media (max-width: 600px) {
-  .grid {
-    grid-template-columns: 1fr;
+  .masonry {
+    columns: 1;
   }
 }

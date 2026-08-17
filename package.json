@@ -11,7 +11,7 @@
     "generate:importmap": "payload generate:importmap"
   },
   "dependencies": {
-    "@jwrae/design-tokens": "^1.0.3",
+    "@jwrae/design-tokens": "^1.1.3",
     "@payloadcms/db-postgres": "^3.0.0",
     "@payloadcms/next": "^3.0.0",
     "@payloadcms/richtext-lexical": "^3.0.0",

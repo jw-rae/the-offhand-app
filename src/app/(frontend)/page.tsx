@@ -50,9 +50,6 @@ export default async function HomePage() {
                   </p>
                 )}
                 <h1 className={styles.heroTitle}>{latest.title}</h1>
-                {latest.description && (
-                  <p className={styles.heroSubtitle}>{latest.description}</p>
-                )}
               </header>
 
               {latest.featuredImage && typeof latest.featuredImage === 'object' && 'url' in latest.featuredImage && latest.featuredImage.url && (
@@ -61,12 +58,8 @@ export default async function HomePage() {
                 </div>
               )}
 
-              {latest.tags && latest.tags.length > 0 && (
-                <div className={styles.tags}>
-                  {latest.tags.map((t) => (
-                    <span key={t.tag} className={styles.tag}>{t.tag}</span>
-                  ))}
-                </div>
+              {latest.description && (
+                <p className={styles.heroSubtitle}>{latest.description}</p>
               )}
 
               <a href={`/posts/${latest.slug}`} className={styles.readMore}>
@@ -82,35 +75,32 @@ export default async function HomePage() {
         </main>
 
         <aside className={styles.sidebar}>
-          <div className={styles.sidebarSection}>
-            <h2 className={styles.sidebarHeading}>Recent</h2>
-            {rest.length > 0 ? (
-              <ul className={styles.recentList}>
-                {rest.map((post) => (
-                  <li key={post.id}>
-                    <a href={`/posts/${post.slug}`} className={styles.recentLink}>
-                      <span className={styles.recentTitle}>{post.title}</span>
-                      {post.publishedAt && (
-                        <time className={styles.recentDate} dateTime={post.publishedAt}>
-                          {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                          })}
-                        </time>
-                      )}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className={styles.emptyMsg}>Nothing here yet.</p>
-            )}
-          </div>
-
-          {posts.length > 0 && (
-            <a href="/posts" className={styles.viewAll}>
-              View all work &rarr;
-            </a>
+          <h2 className={styles.sidebarHeading}>Recent</h2>
+          {rest.length > 0 ? (
+            <>
+              {rest.map((post) => (
+                <a key={post.id} href={`/posts/${post.slug}`} className={styles.recentItem}>
+                  {post.publishedAt && (
+                    <time className={styles.recentDate} dateTime={post.publishedAt}>
+                      {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
+                    </time>
+                  )}
+                  <span className={styles.recentTitle}>{post.title}</span>
+                  {post.description && (
+                    <span className={styles.recentDesc}>{post.description}</span>
+                  )}
+                </a>
+              ))}
+              <a href="/posts" className={styles.viewAll}>
+                View all work &rarr;
+              </a>
+            </>
+          ) : (
+            <p className={styles.emptyMsg}>Nothing here yet.</p>
           )}
         </aside>
       </div>
