@@ -57,16 +57,13 @@ export default buildConfig({
   }),
   plugins: [
     azureStorage({
+      allowContainerCreate: true,
+      baseURL: process.env.AZURE_STORAGE_BASE_URL || '',
+      connectionString: process.env.AZURE_STORAGE_CONNECTION_STRING || '',
+      containerName: process.env.AZURE_STORAGE_CONTAINER_NAME || 'media',
       collections: {
         media: {
           prefix: 'media',
-        },
-      },
-      bucket: process.env.S3_BUCKET || '',
-      config: {
-        credentials: {
-          accountName: process.env.S3_ACCOUNT_NAME || '',
-          accountKey: process.env.S3_ACCOUNT_KEY || '',
         },
       },
     }),
