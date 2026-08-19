@@ -5,6 +5,7 @@ import { azureStorage } from '@payloadcms/storage-azure'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
+import { migrations } from './migrations'
 import { Users } from './collections/Users'
 import { Posts } from './collections/Posts'
 import { Media } from './collections/Media'
@@ -54,10 +55,8 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
+    prodMigrations: migrations,
   }),
-  onInit: async (payload) => {
-    await payload.migrate()
-  },
   plugins: [
     azureStorage({
       allowContainerCreate: true,
