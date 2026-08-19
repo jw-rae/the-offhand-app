@@ -55,6 +55,9 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
+  onInit: async (payload) => {
+    await payload.migrate()
+  },
   plugins: [
     azureStorage({
       allowContainerCreate: true,

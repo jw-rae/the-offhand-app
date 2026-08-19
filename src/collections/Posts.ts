@@ -81,7 +81,7 @@ export const Posts: CollectionConfig = {
   hooks: {
     beforeChange: [
       ({ data, operation }) => {
-        if (operation === 'create' && data?.status === 'published' && !data?.publishedAt) {
+        if (operation === 'create' && data?._status === 'published' && !data?.publishedAt) {
           data.publishedAt = new Date().toISOString()
         }
         return data
