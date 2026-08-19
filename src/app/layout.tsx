@@ -15,7 +15,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const font = FONT_MAP[fontKey] || FONT_MAP['system-sans']
 
   return (
-    <html lang="en" data-theme={theme} data-color-scheme="dark">
+    <html lang="en" data-theme={theme} data-color-scheme="dark" suppressHydrationWarning>
       <head>
         {font.url && <link rel="preconnect" href="https://fonts.googleapis.com" />}
         {font.url && <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />}
