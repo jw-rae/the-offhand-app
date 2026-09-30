@@ -1,12 +1,11 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
+'use client'
+
+import { useSearchParams } from 'next/navigation'
 import { SearchToolbar } from './SearchToolbar'
 import styles from './page.module.css'
 
-export const dynamic = 'force-dynamic'
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-type PostDoc = {
+export type PostDoc = {
   id: string | number
   title: string
   slug: string
@@ -16,60 +15,39 @@ type PostDoc = {
   publishedAt?: string
 }
 
-interface SearchPageProps {
-  searchParams: Promise<{ tag?: string; q?: string; from?: string; to?: string }>
+type TagDoc = { tag: string }
+
+interface SearchViewProps {
+  posts: PostDoc[]
+  tags: TagDoc[]
 }
 
-export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const params = await searchParams
-  const payload = await getPayload({ config })
+export function SearchView({ posts, tags }: SearchViewProps) {
+  const searchParams = useSearchParams()
 
-  const where: any = { _status: { equals: 'published' } }
+  const activeTag = searchParams.get('tag') || ''
+  const query = searchParams.get('q') || ''
+  const dateFrom = searchParams.get('from') || ''
+  const dateTo = searchParams.get('to') || ''
 
-  if (params.tag) {
-    where['tags.tag'] = { equals: params.tag }
+  let filtered = posts
+
+  if (activeTag) {
+    filtered = filtered.filter((p) => p.tags?.some((t) => t.tag === activeTag))
   }
 
-  if (params.from || params.to) {
-    const publishedAt: any = {}
-    if (params.from) publishedAt.greater_than_equal = params.from
-    if (params.to) publishedAt.less_than_equal = params.to + 'T23:59:59.000Z'
-    where.publishedAt = publishedAt
+  if (dateFrom) {
+    filtered = filtered.filter((p) => !p.publishedAt || p.publishedAt >= dateFrom)
   }
 
-  const { docs: allPosts } = await payload.find({
-    collection: 'posts',
-    where: { _status: { equals: 'published' } },
-    limit: 500,
-    sort: '-publishedAt',
-    depth: 1,
-  })
-
-  const { docs: filteredPosts } = await payload.find({
-    collection: 'posts',
-    where,
-    limit: 100,
-    sort: '-publishedAt',
-    depth: 1,
-  })
-
-  const allPostsTyped = allPosts as PostDoc[]
-
-  const tagSet = new Set<string>()
-  for (const post of allPostsTyped) {
-    if (post.tags) {
-      for (const t of post.tags) {
-        tagSet.add(t.tag)
-      }
-    }
+  if (dateTo) {
+    const endOfDay = `${dateTo}T23:59:59.000Z`
+    filtered = filtered.filter((p) => !p.publishedAt || p.publishedAt <= endOfDay)
   }
-  const tags = Array.from(tagSet).sort().map((tag) => ({ tag }))
 
-  let posts = filteredPosts as PostDoc[]
-
-  if (params.q) {
-    const q = params.q.toLowerCase()
-    posts = posts.filter(
+  if (query) {
+    const q = query.toLowerCase()
+    filtered = filtered.filter(
       (p) =>
         p.title.toLowerCase().includes(q) ||
         (p.description && p.description.toLowerCase().includes(q)) ||
@@ -87,12 +65,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       <SearchToolbar tags={tags} />
 
       <p className={styles.resultCount}>
-        {posts.length} {posts.length === 1 ? 'result' : 'results'}
+        {filtered.length} {filtered.length === 1 ? 'result' : 'results'}
       </p>
 
-      {posts.length > 0 ? (
+      {filtered.length > 0 ? (
         <div className={styles.list}>
-          {posts.map((post) => {
+          {filtered.map((post) => {
             const hasImage = post.featuredImage && typeof post.featuredImage === 'object' && 'url' in post.featuredImage && post.featuredImage.url
 
             return (

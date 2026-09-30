@@ -1,10 +1,9 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
 import { notFound } from 'next/navigation'
+import { getPublishedPosts, getPostBySlug } from '../../../../lib/content'
 import { RichText } from '../../components/RichText'
 import styles from './page.module.css'
 
-export const dynamic = 'force-dynamic'
+export const dynamicParams = false
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type PostDoc = {
@@ -22,23 +21,16 @@ interface PostPageProps {
   params: Promise<{ slug: string }>
 }
 
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  const posts = await getPublishedPosts({ limit: 500, depth: 0 })
+  return posts
+    .filter((p) => p.slug)
+    .map((p) => ({ slug: p.slug }))
+}
+
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params
-  const payload = await getPayload({ config })
-
-  const { docs } = await payload.find({
-    collection: 'posts',
-    where: {
-      and: [
-        { slug: { equals: slug } },
-        { _status: { equals: 'published' } },
-      ],
-    },
-    limit: 1,
-    depth: 2,
-  })
-
-  const post = docs[0] as PostDoc | undefined
+  const post = (await getPostBySlug(slug)) as PostDoc | null
   if (!post) notFound()
 
   const date = post.publishedAt

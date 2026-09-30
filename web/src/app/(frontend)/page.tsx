@@ -1,8 +1,5 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
+import { getPublishedPosts } from '../../lib/content'
 import styles from './page.module.css'
-
-export const dynamic = 'force-dynamic'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type PostDoc = {
@@ -16,17 +13,7 @@ type PostDoc = {
 }
 
 export default async function HomePage() {
-  const payload = await getPayload({ config })
-
-  const { docs } = await payload.find({
-    collection: 'posts',
-    where: { _status: { equals: 'published' } },
-    limit: 6,
-    sort: '-publishedAt',
-    depth: 1,
-  })
-
-  const posts = docs as PostDoc[]
+  const posts = (await getPublishedPosts({ limit: 6, depth: 1 })) as PostDoc[]
   const latest = posts[0]
   const rest = posts.slice(1)
 

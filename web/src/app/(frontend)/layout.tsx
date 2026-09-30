@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getSiteSettings } from '../../lib/getSiteSettings'
+import { getSiteSettings } from '../../lib/content'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import './frontend.css'

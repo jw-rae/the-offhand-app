@@ -8,7 +8,7 @@ import styles from './Header.module.css'
 
 type HeaderProps = {
   title?: string
-  logo?: { id: number; url?: string | null; alt?: string } | null
+  logo?: { id: string | number; url?: string | null; alt?: string | null } | null
 }
 
 export function Header({ title = 'THE OFFHAND', logo }: HeaderProps) {

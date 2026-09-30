@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { triggerSiteDeploy } from '../lib/triggerSiteDeploy'
 
 export const Posts: CollectionConfig = {
   slug: 'posts',
@@ -85,6 +86,18 @@ export const Posts: CollectionConfig = {
           data.publishedAt = new Date().toISOString()
         }
         return data
+      },
+    ],
+    afterChange: [
+      async ({ doc }) => {
+        if (doc?._status === 'published') {
+          await triggerSiteDeploy()
+        }
+      },
+    ],
+    afterDelete: [
+      async () => {
+        await triggerSiteDeploy()
       },
     ],
   },

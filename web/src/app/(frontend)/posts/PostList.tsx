@@ -1,12 +1,11 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
+'use client'
+
+import { useSearchParams } from 'next/navigation'
 import { PostCard } from '../components/PostCard'
 import styles from './page.module.css'
 
-export const dynamic = 'force-dynamic'
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-type PostDoc = {
+export type PostDoc = {
   id: string | number
   title: string
   slug: string
@@ -18,56 +17,42 @@ type PostDoc = {
 
 const VARIANTS = ['short', 'medium', 'tall', 'wide', 'text-only'] as const
 
-interface PostsPageProps {
-  searchParams: Promise<{ tag?: string }>
+interface PostListProps {
+  posts: PostDoc[]
 }
 
-export default async function PostsPage({ searchParams }: PostsPageProps) {
-  const params = await searchParams
-  const payload = await getPayload({ config })
+export function PostList({ posts }: PostListProps) {
+  const searchParams = useSearchParams()
+  const activeTag = searchParams.get('tag') || ''
 
-  const where: any = { _status: { equals: 'published' } }
-
-  if (params.tag) {
-    where['tags.tag'] = { equals: params.tag }
-  }
-
-  const { docs } = await payload.find({
-    collection: 'posts',
-    where,
-    limit: 50,
-    sort: '-publishedAt',
-    depth: 1,
-  })
-
-  const posts = docs as PostDoc[]
+  const filtered = activeTag
+    ? posts.filter((post) => post.tags?.some((t) => t.tag === activeTag))
+    : posts
 
   return (
     <div className={styles.page}>
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <p className={styles.eyebrow}>Work</p>
-          <h1 className={styles.title}>
-            {params.tag ? params.tag : 'All Posts'}
-          </h1>
+          <h1 className={styles.title}>{activeTag || 'All Posts'}</h1>
         </div>
         <a href="/search" className={styles.searchLink}>
           Advanced search &rarr;
         </a>
       </div>
 
-      {params.tag && (
+      {activeTag && (
         <div>
           <a href="/posts" className={styles.activeFilter}>
-            {params.tag}
+            {activeTag}
             <span className={styles.activeFilterX}>&times;</span>
           </a>
         </div>
       )}
 
-      {posts.length > 0 ? (
+      {filtered.length > 0 ? (
         <div className={styles.masonry}>
-          {posts.map((post, i) => {
+          {filtered.map((post, i) => {
             const hasImage = post.featuredImage && typeof post.featuredImage === 'object' && 'url' in post.featuredImage && post.featuredImage.url
             const variant = hasImage ? VARIANTS[i % VARIANTS.length] : 'text-only'
 
