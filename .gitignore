@@ -26,6 +26,7 @@ yarn-error.log*
 
 # types
 src/payload-types.ts
+*.tsbuildinfo
 
 # media uploads
 public/media/*

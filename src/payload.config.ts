@@ -60,6 +60,7 @@ export default buildConfig({
   plugins: [
     azureStorage({
       allowContainerCreate: true,
+      alwaysInsertFields: true,
       baseURL: process.env.AZURE_STORAGE_BASE_URL || '',
       connectionString: process.env.AZURE_STORAGE_CONNECTION_STRING || '',
       containerName: process.env.AZURE_STORAGE_CONTAINER_NAME || 'media',
