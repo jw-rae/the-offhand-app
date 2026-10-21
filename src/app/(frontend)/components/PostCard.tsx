@@ -9,6 +9,7 @@ interface PostCardProps {
   slug: string
   description?: string
   publishedAt?: string
+  authorName?: string
   tags?: { tag: string }[]
   featuredImageUrl?: string
   variant?: 'short' | 'medium' | 'tall' | 'wide' | 'text-only'
@@ -23,7 +24,7 @@ const thumbClass = {
 }
 
 export function PostCard({
-  title, slug, description, publishedAt, tags, featuredImageUrl,
+  title, slug, description, publishedAt, authorName, tags, featuredImageUrl,
   variant = 'medium',
 }: PostCardProps) {
   const router = useRouter()
@@ -46,6 +47,7 @@ export function PostCard({
         <div className={styles.content}>
           <div className={styles.meta}>
             {date && <time className={styles.date}>{date}</time>}
+            {authorName && <span className={styles.author}>By {authorName}</span>}
           </div>
           <h2 className={styles.title}>{title}</h2>
           {description && (

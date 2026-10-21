@@ -12,6 +12,7 @@ type PostDoc = {
   slug: string
   description?: string
   featuredImage?: any
+  author?: number | { name?: string | null }
   tags?: { tag: string; id?: string | number }[]
   publishedAt?: string
 }
@@ -107,6 +108,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                           year: 'numeric',
                         })}
                       </time>
+                    )}
+                    {typeof post.author === 'object' && post.author?.name && (
+                      <span>By {post.author.name}</span>
                     )}
                   </div>
                   <h2 className={styles.listTitle}>{post.title}</h2>

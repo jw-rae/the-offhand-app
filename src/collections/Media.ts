@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnlyAccess, adminPanelAccess } from '../lib/access'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -7,6 +8,13 @@ export const Media: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'alt',
+  },
+  access: {
+    admin: adminPanelAccess,
+    create: adminPanelAccess,
+    delete: adminOnlyAccess,
+    read: () => true,
+    update: adminOnlyAccess,
   },
   fields: [
     {

@@ -12,6 +12,7 @@ type PostDoc = {
   slug: string
   description?: string
   featuredImage?: any
+  author?: number | { name?: string | null }
   tags?: { tag: string; id?: string | number }[]
   publishedAt?: string
 }
@@ -78,6 +79,7 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                 slug={post.slug}
                 description={post.description}
                 publishedAt={post.publishedAt}
+                authorName={typeof post.author === 'object' ? post.author?.name ?? undefined : undefined}
                 tags={post.tags}
                 featuredImageUrl={hasImage ? post.featuredImage.url : undefined}
                 variant={variant}

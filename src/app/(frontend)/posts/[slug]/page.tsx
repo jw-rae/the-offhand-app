@@ -14,6 +14,7 @@ type PostDoc = {
   description?: string
   content: any
   featuredImage?: any
+  author?: number | { name?: string | null }
   tags?: { tag: string; id?: string | number }[]
   publishedAt?: string
 }
@@ -60,9 +61,12 @@ export default async function PostPage({ params }: PostPageProps) {
       </a>
 
       <header className={styles.hero}>
-        {date && (
+        {(date || (typeof post.author === 'object' && post.author?.name)) && (
           <div className={styles.meta}>
-            <time dateTime={post.publishedAt!}>{date}</time>
+            {date && <time dateTime={post.publishedAt!}>{date}</time>}
+            {typeof post.author === 'object' && post.author?.name && (
+              <span>By {post.author.name}</span>
+            )}
           </div>
         )}
         <h1 className={styles.title}>{post.title}</h1>
