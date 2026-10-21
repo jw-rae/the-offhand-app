@@ -5,21 +5,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import styles from './page.module.css'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-type TagDoc = { tag: string }
-
-interface SearchToolbarProps {
-  tags: TagDoc[]
-}
-
-export function SearchToolbar({ tags }: SearchToolbarProps) {
+export function SearchToolbar() {
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  const activeTag = searchParams.get('tag') || ''
   const query = searchParams.get('q') || ''
   const dateFrom = searchParams.get('from') || ''
   const dateTo = searchParams.get('to') || ''
-  const hasFilters = !!(query || activeTag || dateFrom || dateTo)
+  const hasFilters = !!(query || dateFrom || dateTo)
 
   const updateParams = useCallback((updates: Record<string, string>) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -73,19 +66,6 @@ export function SearchToolbar({ tags }: SearchToolbarProps) {
         </label>
       </div>
 
-      {tags.length > 0 && (
-        <div className={styles.tagRow}>
-          {tags.map((t) => (
-            <button
-              key={t.tag}
-              className={`${styles.tagBtn} ${activeTag === t.tag ? styles.tagBtnActive : ''}`}
-              onClick={() => updateParams({ tag: activeTag === t.tag ? '' : t.tag })}
-            >
-              {t.tag}
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

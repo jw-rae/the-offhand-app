@@ -83,27 +83,3 @@
 .body {
   padding: 0;
 }
-
-/* ── Tags ── */
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-
-.tag {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-secondary);
-  background: var(--color-surface-secondary);
-  border: 1px solid var(--color-border-primary);
-  padding: 3px 10px;
-  border-radius: var(--border-radius-full, 999px);
-  text-decoration: none;
-  transition: color var(--duration-200) var(--ease-out), border-color var(--duration-200) var(--ease-out);
-}
-
-.tag:hover {
-  color: var(--accent);
-  border-color: var(--accent);
-}

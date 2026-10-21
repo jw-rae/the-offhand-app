@@ -12,7 +12,6 @@ type PostDoc = {
   description?: string
   featuredImage?: any
   author?: number | { name?: string | null }
-  tags?: { tag: string; id?: string | number }[]
   publishedAt?: string
 }
 

@@ -4,6 +4,7 @@ import { adminOnlyAccess, postCreateAccess, postReadAccess, postUpdateAccess, is
 export const Posts: CollectionConfig = {
   slug: 'posts',
   admin: {
+    defaultColumns: ['featuredImage', 'title', 'slug', 'author', 'createdAt', 'updatedAt', '_status'],
     useAsTitle: 'title',
   },
   versions: {
@@ -73,22 +74,9 @@ export const Posts: CollectionConfig = {
       relationTo: 'media',
     },
     {
-      name: 'tags',
-      type: 'array',
-      fields: [
-        {
-          name: 'tag',
-          type: 'text',
-          required: true,
-        },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
       name: 'publishedAt',
       type: 'date',
+      label: 'Date Posted',
       admin: {
         position: 'sidebar',
         date: {

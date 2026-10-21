@@ -96,26 +96,3 @@
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
 }
-
-/* ── Tags ── */
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-  padding: 0 var(--space-lg) var(--space-lg);
-}
-
-.tag {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  color: var(--accent);
-  background: var(--accent-muted);
-  padding: 2px 8px;
-  border-radius: var(--border-radius-sm);
-  cursor: pointer;
-  transition: opacity var(--duration-200) var(--ease-out);
-}
-
-.tag:hover {
-  opacity: 0.75;
-}

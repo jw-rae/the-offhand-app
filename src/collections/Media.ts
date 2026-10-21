@@ -7,7 +7,8 @@ export const Media: CollectionConfig = {
     mimeTypes: ['image/*', 'text/markdown', 'text/plain', 'application/pdf'],
   },
   admin: {
-    useAsTitle: 'alt',
+    defaultColumns: ['filename', 'createdAt', 'updatedAt'],
+    useAsTitle: 'filename',
   },
   access: {
     admin: adminPanelAccess,

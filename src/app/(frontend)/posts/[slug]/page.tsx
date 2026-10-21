@@ -15,7 +15,6 @@ type PostDoc = {
   content: any
   featuredImage?: any
   author?: number | { name?: string | null }
-  tags?: { tag: string; id?: string | number }[]
   publishedAt?: string
 }
 
@@ -83,13 +82,6 @@ export default async function PostPage({ params }: PostPageProps) {
         <RichText content={post.content} />
       </div>
 
-      {post.tags && post.tags.length > 0 && (
-        <div className={styles.tags}>
-          {post.tags.map((t) => (
-            <a key={t.tag} href={`/posts?tag=${encodeURIComponent(t.tag)}`} className={styles.tag}>{t.tag}</a>
-          ))}
-        </div>
-      )}
     </article>
   )
 }

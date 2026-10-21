@@ -13,29 +13,17 @@ type PostDoc = {
   description?: string
   featuredImage?: any
   author?: number | { name?: string | null }
-  tags?: { tag: string; id?: string | number }[]
   publishedAt?: string
 }
 
 const VARIANTS = ['short', 'medium', 'tall', 'wide', 'text-only'] as const
 
-interface PostsPageProps {
-  searchParams: Promise<{ tag?: string }>
-}
-
-export default async function PostsPage({ searchParams }: PostsPageProps) {
-  const params = await searchParams
+export default async function PostsPage() {
   const payload = await getPayload({ config })
-
-  const where: any = { _status: { equals: 'published' } }
-
-  if (params.tag) {
-    where['tags.tag'] = { equals: params.tag }
-  }
 
   const { docs } = await payload.find({
     collection: 'posts',
-    where,
+    where: { _status: { equals: 'published' } },
     limit: 50,
     sort: '-publishedAt',
     depth: 1,
@@ -48,23 +36,12 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <p className={styles.eyebrow}>Work</p>
-          <h1 className={styles.title}>
-            {params.tag ? params.tag : 'All Posts'}
-          </h1>
+          <h1 className={styles.title}>All Posts</h1>
         </div>
         <a href="/search" className={styles.searchLink}>
           Advanced search &rarr;
         </a>
       </div>
-
-      {params.tag && (
-        <div>
-          <a href="/posts" className={styles.activeFilter}>
-            {params.tag}
-            <span className={styles.activeFilterX}>&times;</span>
-          </a>
-        </div>
-      )}
 
       {posts.length > 0 ? (
         <div className={styles.masonry}>
@@ -80,7 +57,6 @@ export default async function PostsPage({ searchParams }: PostsPageProps) {
                 description={post.description}
                 publishedAt={post.publishedAt}
                 authorName={typeof post.author === 'object' ? post.author?.name ?? undefined : undefined}
-                tags={post.tags}
                 featuredImageUrl={hasImage ? post.featuredImage.url : undefined}
                 variant={variant}
               />
