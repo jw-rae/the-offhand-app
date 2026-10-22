@@ -22,7 +22,10 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { FeaturedImageCell as FeaturedImageCell_ef789daa320ec6e02dd8b6fd9adbc423 } from '../../../components/FeaturedImageCell'
+import { MediaUploadAction as MediaUploadAction_9cdda76d3a182e97cb5a45d3cbff5c56 } from '../../../components/MediaUploadAction'
 import { AzureClientUploadHandler as AzureClientUploadHandler_635fb302eaf52f6baca4f9f8ad9ce104 } from '@payloadcms/storage-azure/client'
+import { AdminDashboardRedirect as AdminDashboardRedirect_682f9cd335159ccf212b3f50444ee914 } from '../../../components/AdminDashboardRedirect'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -51,6 +54,9 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/components/FeaturedImageCell#FeaturedImageCell": FeaturedImageCell_ef789daa320ec6e02dd8b6fd9adbc423,
+  "/components/MediaUploadAction#MediaUploadAction": MediaUploadAction_9cdda76d3a182e97cb5a45d3cbff5c56,
   "@payloadcms/storage-azure/client#AzureClientUploadHandler": AzureClientUploadHandler_635fb302eaf52f6baca4f9f8ad9ce104,
+  "/components/AdminDashboardRedirect#AdminDashboardRedirect": AdminDashboardRedirect_682f9cd335159ccf212b3f50444ee914,
   "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

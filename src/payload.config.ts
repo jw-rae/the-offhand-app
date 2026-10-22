@@ -18,6 +18,14 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     user: Users.slug,
+    dateFormat: 'yyyy/MM/dd HH:mm',
+    components: {
+      views: {
+        dashboard: {
+          Component: '/components/AdminDashboardRedirect#AdminDashboardRedirect',
+        },
+      },
+    },
     importMap: {
       baseDir: path.resolve(dirname),
     },

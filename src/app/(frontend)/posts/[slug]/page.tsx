@@ -14,7 +14,7 @@ type PostDoc = {
   description?: string
   content: any
   featuredImage?: any
-  tags?: { tag: string; id?: string | number }[]
+  author?: number | { name?: string | null }
   publishedAt?: string
 }
 
@@ -60,9 +60,12 @@ export default async function PostPage({ params }: PostPageProps) {
       </a>
 
       <header className={styles.hero}>
-        {date && (
+        {(date || (typeof post.author === 'object' && post.author?.name)) && (
           <div className={styles.meta}>
-            <time dateTime={post.publishedAt!}>{date}</time>
+            {date && <time dateTime={post.publishedAt!}>{date}</time>}
+            {typeof post.author === 'object' && post.author?.name && (
+              <span>By {post.author.name}</span>
+            )}
           </div>
         )}
         <h1 className={styles.title}>{post.title}</h1>
@@ -79,13 +82,6 @@ export default async function PostPage({ params }: PostPageProps) {
         <RichText content={post.content} />
       </div>
 
-      {post.tags && post.tags.length > 0 && (
-        <div className={styles.tags}>
-          {post.tags.map((t) => (
-            <a key={t.tag} href={`/posts?tag=${encodeURIComponent(t.tag)}`} className={styles.tag}>{t.tag}</a>
-          ))}
-        </div>
-      )}
     </article>
   )
 }

@@ -51,30 +51,6 @@
   opacity: 0.75;
 }
 
-.activeFilter {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: var(--space-xs) var(--space-sm);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--accent);
-  background: var(--accent-muted);
-  border-radius: var(--border-radius-full, 999px);
-  text-decoration: none;
-  transition: opacity var(--duration-200) var(--ease-out);
-}
-
-.activeFilter:hover {
-  opacity: 0.75;
-}
-
-.activeFilterX {
-  font-size: var(--font-size-sm);
-  line-height: 1;
-  opacity: 0.6;
-}
-
 .masonry {
   columns: 3;
   column-gap: var(--space-lg);

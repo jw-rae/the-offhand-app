@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { useRouter } from 'next/navigation'
 import styles from './PostCard.module.css'
 
 interface PostCardProps {
@@ -9,7 +8,7 @@ interface PostCardProps {
   slug: string
   description?: string
   publishedAt?: string
-  tags?: { tag: string }[]
+  authorName?: string
   featuredImageUrl?: string
   variant?: 'short' | 'medium' | 'tall' | 'wide' | 'text-only'
 }
@@ -23,10 +22,9 @@ const thumbClass = {
 }
 
 export function PostCard({
-  title, slug, description, publishedAt, tags, featuredImageUrl,
+  title, slug, description, publishedAt, authorName, featuredImageUrl,
   variant = 'medium',
 }: PostCardProps) {
-  const router = useRouter()
   const date = publishedAt
     ? new Date(publishedAt).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -46,6 +44,7 @@ export function PostCard({
         <div className={styles.content}>
           <div className={styles.meta}>
             {date && <time className={styles.date}>{date}</time>}
+            {authorName && <span className={styles.author}>By {authorName}</span>}
           </div>
           <h2 className={styles.title}>{title}</h2>
           {description && (
@@ -53,31 +52,6 @@ export function PostCard({
           )}
         </div>
       </a>
-      {tags && tags.length > 0 && (
-        <div className={styles.tags}>
-          {tags.map(({ tag }) => (
-            <span
-              key={tag}
-              className={styles.tag}
-              role="link"
-              tabIndex={0}
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                router.push(`/posts?tag=${encodeURIComponent(tag)}`)
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault()
-                  router.push(`/posts?tag=${encodeURIComponent(tag)}`)
-                }
-              }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

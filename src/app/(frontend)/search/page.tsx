@@ -12,12 +12,12 @@ type PostDoc = {
   slug: string
   description?: string
   featuredImage?: any
-  tags?: { tag: string; id?: string | number }[]
+  author?: number | { name?: string | null }
   publishedAt?: string
 }
 
 interface SearchPageProps {
-  searchParams: Promise<{ tag?: string; q?: string; from?: string; to?: string }>
+  searchParams: Promise<{ q?: string; from?: string; to?: string }>
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
@@ -26,24 +26,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const where: any = { _status: { equals: 'published' } }
 
-  if (params.tag) {
-    where['tags.tag'] = { equals: params.tag }
-  }
-
   if (params.from || params.to) {
     const publishedAt: any = {}
     if (params.from) publishedAt.greater_than_equal = params.from
     if (params.to) publishedAt.less_than_equal = params.to + 'T23:59:59.000Z'
     where.publishedAt = publishedAt
   }
-
-  const { docs: allPosts } = await payload.find({
-    collection: 'posts',
-    where: { _status: { equals: 'published' } },
-    limit: 500,
-    sort: '-publishedAt',
-    depth: 1,
-  })
 
   const { docs: filteredPosts } = await payload.find({
     collection: 'posts',
@@ -53,18 +41,6 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     depth: 1,
   })
 
-  const allPostsTyped = allPosts as PostDoc[]
-
-  const tagSet = new Set<string>()
-  for (const post of allPostsTyped) {
-    if (post.tags) {
-      for (const t of post.tags) {
-        tagSet.add(t.tag)
-      }
-    }
-  }
-  const tags = Array.from(tagSet).sort().map((tag) => ({ tag }))
-
   let posts = filteredPosts as PostDoc[]
 
   if (params.q) {
@@ -72,8 +48,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     posts = posts.filter(
       (p) =>
         p.title.toLowerCase().includes(q) ||
-        (p.description && p.description.toLowerCase().includes(q)) ||
-        (p.tags && p.tags.some((t) => t.tag.toLowerCase().includes(q))),
+        (p.description && p.description.toLowerCase().includes(q)),
     )
   }
 
@@ -84,7 +59,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <h1 className={styles.title}>Find Posts</h1>
       </div>
 
-      <SearchToolbar tags={tags} />
+      <SearchToolbar />
 
       <p className={styles.resultCount}>
         {posts.length} {posts.length === 1 ? 'result' : 'results'}
@@ -108,17 +83,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                         })}
                       </time>
                     )}
+                    {typeof post.author === 'object' && post.author?.name && (
+                      <span>By {post.author.name}</span>
+                    )}
                   </div>
                   <h2 className={styles.listTitle}>{post.title}</h2>
                   {post.description && (
                     <p className={styles.listDesc}>{post.description}</p>
-                  )}
-                  {post.tags && post.tags.length > 0 && (
-                    <div className={styles.listTags}>
-                      {post.tags.map((t) => (
-                        <span key={t.tag} className={styles.listTag}>{t.tag}</span>
-                      ))}
-                    </div>
                   )}
                 </div>
                 {hasImage && (

@@ -11,7 +11,7 @@ type PostDoc = {
   slug: string
   description?: string
   featuredImage?: any
-  tags?: { tag: string; id?: string | number }[]
+  author?: number | { name?: string | null }
   publishedAt?: string
 }
 
@@ -37,16 +37,21 @@ export default async function HomePage() {
           {latest ? (
             <>
               <header className={styles.hero}>
-                {latest.publishedAt && (
+                {(latest.publishedAt || (typeof latest.author === 'object' && latest.author?.name)) && (
                   <p className={styles.eyebrow}>
-                    <time dateTime={latest.publishedAt}>
-                      {new Date(latest.publishedAt).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
-                    </time>
+                    {latest.publishedAt && (
+                      <time dateTime={latest.publishedAt}>
+                        {new Date(latest.publishedAt).toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'long',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </time>
+                    )}
+                    {typeof latest.author === 'object' && latest.author?.name && (
+                      <>{latest.publishedAt && ' · '}By {latest.author.name}</>
+                    )}
                   </p>
                 )}
                 <h1 className={styles.heroTitle}>{latest.title}</h1>
@@ -88,6 +93,9 @@ export default async function HomePage() {
                         year: 'numeric',
                       })}
                     </time>
+                  )}
+                  {typeof post.author === 'object' && post.author?.name && (
+                    <span className={styles.recentDate}>By {post.author.name}</span>
                   )}
                   <span className={styles.recentTitle}>{post.title}</span>
                   {post.description && (

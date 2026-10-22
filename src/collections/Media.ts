@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnlyAccess, adminPanelAccess } from '../lib/access'
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -6,7 +7,22 @@ export const Media: CollectionConfig = {
     mimeTypes: ['image/*', 'text/markdown', 'text/plain', 'application/pdf'],
   },
   admin: {
-    useAsTitle: 'alt',
+    defaultColumns: ['filename', 'createdAt', 'updatedAt'],
+    useAsTitle: 'filename',
+    components: {
+      views: {
+        list: {
+          actions: ['/components/MediaUploadAction#MediaUploadAction'],
+        },
+      },
+    },
+  },
+  access: {
+    admin: adminPanelAccess,
+    create: adminPanelAccess,
+    delete: adminOnlyAccess,
+    read: () => true,
+    update: adminOnlyAccess,
   },
   fields: [
     {
