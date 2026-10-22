@@ -11,8 +11,10 @@ type PostDoc = {
   slug: string
   description?: string
   featuredImage?: any
-  author?: number | { name?: string | null }
+  author?: number | { id?: number | string; name?: string | null }
+  tags?: { tag: string; id?: string | number }[]
   publishedAt?: string
+  createdAt?: string
 }
 
 export default async function HomePage() {
@@ -24,11 +26,14 @@ export default async function HomePage() {
     limit: 6,
     sort: '-publishedAt',
     depth: 1,
+    overrideAccess: true,
   })
 
   const posts = docs as PostDoc[]
   const latest = posts[0]
   const rest = posts.slice(1)
+  const latestDate = latest?.publishedAt ?? latest?.createdAt
+  const latestAuthorName = typeof latest?.author === 'object' && latest.author?.name
 
   return (
     <div className={styles.page}>
@@ -37,22 +42,24 @@ export default async function HomePage() {
           {latest ? (
             <>
               <header className={styles.hero}>
-                {(latest.publishedAt || (typeof latest.author === 'object' && latest.author?.name)) && (
-                  <p className={styles.eyebrow}>
-                    {latest.publishedAt && (
-                      <time dateTime={latest.publishedAt}>
-                        {new Date(latest.publishedAt).toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          month: 'long',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
-                      </time>
+                {(latestDate || latestAuthorName) && (
+                  <div className={styles.heroMeta}>
+                    {latestDate && (
+                      <p className={styles.eyebrow}>
+                        <time dateTime={latestDate}>
+                          {new Date(latestDate).toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric',
+                          })}
+                        </time>
+                      </p>
                     )}
-                    {typeof latest.author === 'object' && latest.author?.name && (
-                      <>{latest.publishedAt && ' · '}By {latest.author.name}</>
+                    {latestAuthorName && (
+                      <span className={styles.heroAuthor}>By {latestAuthorName}</span>
                     )}
-                  </p>
+                  </div>
                 )}
                 <h1 className={styles.heroTitle}>{latest.title}</h1>
               </header>
@@ -83,26 +90,34 @@ export default async function HomePage() {
           <h2 className={styles.sidebarHeading}>Recent</h2>
           {rest.length > 0 ? (
             <>
-              {rest.map((post) => (
-                <a key={post.id} href={`/posts/${post.slug}`} className={styles.recentItem}>
-                  {post.publishedAt && (
-                    <time className={styles.recentDate} dateTime={post.publishedAt}>
-                      {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
-                    </time>
-                  )}
-                  {typeof post.author === 'object' && post.author?.name && (
-                    <span className={styles.recentDate}>By {post.author.name}</span>
-                  )}
-                  <span className={styles.recentTitle}>{post.title}</span>
-                  {post.description && (
-                    <span className={styles.recentDesc}>{post.description}</span>
-                  )}
-                </a>
-              ))}
+              {rest.map((post) => {
+                const authorName = typeof post.author === 'object' && post.author?.name
+
+                return (
+                  <a key={post.id} href={`/posts/${post.slug}`} className={styles.recentItem}>
+                    {(post.publishedAt || authorName) && (
+                      <div className={styles.recentMeta}>
+                        {post.publishedAt && (
+                          <time className={styles.recentDate} dateTime={post.publishedAt}>
+                            {new Date(post.publishedAt).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                            })}
+                          </time>
+                        )}
+                        {authorName && (
+                          <span className={styles.recentAuthor}>By {authorName}</span>
+                        )}
+                      </div>
+                    )}
+                    <span className={styles.recentTitle}>{post.title}</span>
+                    {post.description && (
+                      <span className={styles.recentDesc}>{post.description}</span>
+                    )}
+                  </a>
+                )
+              })}
               <a href="/posts" className={styles.viewAll}>
                 View all work &rarr;
               </a>
