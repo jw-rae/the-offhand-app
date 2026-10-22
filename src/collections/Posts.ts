@@ -72,6 +72,12 @@ export const Posts: CollectionConfig = {
       name: 'featuredImage',
       type: 'upload',
       relationTo: 'media',
+      maxDepth: 1,
+      admin: {
+        components: {
+          Cell: '/components/FeaturedImageCell#FeaturedImageCell',
+        },
+      },
     },
     {
       name: 'publishedAt',

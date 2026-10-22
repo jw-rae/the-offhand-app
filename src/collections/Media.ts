@@ -9,6 +9,13 @@ export const Media: CollectionConfig = {
   admin: {
     defaultColumns: ['filename', 'createdAt', 'updatedAt'],
     useAsTitle: 'filename',
+    components: {
+      views: {
+        list: {
+          actions: ['/components/MediaUploadAction#MediaUploadAction'],
+        },
+      },
+    },
   },
   access: {
     admin: adminPanelAccess,
