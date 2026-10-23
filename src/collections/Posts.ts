@@ -84,11 +84,32 @@ export const Posts: CollectionConfig = {
       type: 'date',
       label: 'Date Posted',
       admin: {
+        readOnly: true,
+        description: 'Set automatically when the post is first published.',
         position: 'sidebar',
         date: {
           pickerAppearance: 'dayAndTime',
         },
       },
+    },
+    {
+      name: 'homepageQueuePosition',
+      type: 'number',
+      unique: true,
+      min: 1,
+      access: {
+        update: ({ req }) => isAdmin(req.user),
+      },
+      admin: {
+        condition: (_, __, { user }) => isAdmin(user),
+        description: 'Optional homepage queue order. Lowest number becomes the headline; leave blank to use publish date.',
+        position: 'sidebar',
+        step: 1,
+      },
+      validate: (value: number | null | undefined) =>
+        value === undefined || value === null || Number.isInteger(value)
+          ? true
+          : 'Enter a whole-number queue position.',
     },
   ],
   hooks: {
@@ -104,8 +125,14 @@ export const Posts: CollectionConfig = {
                 : originalAuthor
         }
 
-        if (operation === 'create' && data?._status === 'published' && !data?.publishedAt) {
-          data.publishedAt = new Date().toISOString()
+        const status = data?._status ?? originalDoc?._status
+        if (status === 'published') {
+          data.publishedAt =
+            operation === 'create' || originalDoc?._status !== 'published'
+              ? new Date().toISOString()
+              : originalDoc?.publishedAt ?? originalDoc?.createdAt ?? new Date().toISOString()
+        } else {
+          data.publishedAt = null
         }
         return data
       },

@@ -20,16 +20,66 @@ type PostDoc = {
 export default async function HomePage() {
   const payload = await getPayload({ config })
 
-  const { docs } = await payload.find({
+  const { docs: latestDocs } = await payload.find({
     collection: 'posts',
     where: { _status: { equals: 'published' } },
-    limit: 6,
-    sort: '-publishedAt',
+    limit: 1,
+    sort: ['-publishedAt', '-createdAt'],
     depth: 1,
     overrideAccess: true,
   })
 
-  const posts = docs as PostDoc[]
+  const latestPost = latestDocs[0] as PostDoc | undefined
+  const latestId = latestPost ? [latestPost.id] : []
+  const { docs: queuedDocs } =
+    latestPost
+      ? await payload.find({
+          collection: 'posts',
+          where: {
+            and: [
+              { _status: { equals: 'published' } },
+              { homepageQueuePosition: { greater_than: 0 } },
+              { id: { not_in: latestId } },
+            ],
+          },
+          limit: 5,
+          sort: 'homepageQueuePosition',
+          depth: 1,
+          overrideAccess: true,
+        })
+      : { docs: [] }
+
+  const queuedPosts = queuedDocs as PostDoc[]
+  const remaining = 5 - queuedPosts.length
+  const { docs: recentDocs } =
+    remaining > 0 && latestPost
+      ? await payload.find({
+          collection: 'posts',
+          where: {
+            and: [
+              { _status: { equals: 'published' } },
+              {
+                id: {
+                  not_in: [
+                    ...latestId,
+                    ...queuedPosts.map((post) => post.id),
+                  ],
+                },
+              },
+            ],
+          },
+          limit: remaining,
+          sort: ['-publishedAt', '-createdAt'],
+          depth: 1,
+          overrideAccess: true,
+        })
+      : { docs: [] }
+
+  const posts = [
+    ...(latestPost ? [latestPost] : []),
+    ...queuedPosts,
+    ...(recentDocs as PostDoc[]),
+  ]
   const latest = posts[0]
   const rest = posts.slice(1)
   const latestDate = latest?.publishedAt ?? latest?.createdAt

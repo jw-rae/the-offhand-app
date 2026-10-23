@@ -50,6 +50,13 @@ npm run generate:importmap  # Regenerate Payload admin imports
 
 Keep applied migrations: they are the database’s schema history.
 
+The homepage headline is always the newest published post. Recent posts follow
+in the optional queue position order (lowest number first), then by newest
+published date. Drafts never appear on the homepage. Queue positions are
+edited in a post’s admin sidebar.
+The publication date is assigned automatically when a draft is published and
+is read-only in the admin.
+
 ## Architecture
 
 ```mermaid
