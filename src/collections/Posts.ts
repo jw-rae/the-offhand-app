@@ -90,6 +90,14 @@ export const Posts: CollectionConfig = {
         },
       },
     },
+    {
+      name: 'telegramUpdateId',
+      type: 'text',
+      unique: true,
+      admin: {
+        hidden: true,
+      },
+    },
   ],
   hooks: {
     beforeChange: [

@@ -50,11 +50,18 @@ npm run generate:importmap  # Regenerate Payload admin imports
 
 Keep applied migrations: they are the database’s schema history.
 
+## Telegram writing assistant
+
+The optional webhook uses Azure Foundry for article drafts and Azure Speech F0 for voice notes (up to 60 seconds). Configure the `TELEGRAM_*`, `AZURE_FOUNDRY_*`, and `AZURE_SPEECH_*` values from `.env.example`, then apply pending Payload migrations before registering the Telegram webhook.
+
 ## Architecture
 
 ```mermaid
 flowchart LR
   Visitor --> Next["Next.js + Payload CMS"]
+  Telegram --> Next
   Next --> DB[(PostgreSQL)]
   Next --> Media["Azure Blob Storage"]
+  Next --> Foundry["Azure Foundry"]
+  Next --> Speech["Azure Speech F0"]
 ```
